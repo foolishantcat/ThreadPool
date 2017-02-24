@@ -19,7 +19,9 @@ private:
     TaskContainer task_container_;
     std::thread thread_this_;
     std::mutex busy_mutex_;
-    std::mutex idle_muetx_;
+    std::mutex idle_mutex_;
+    std::mutex task_mutex_;
+    int number_of_thread_;
 
 };
 
