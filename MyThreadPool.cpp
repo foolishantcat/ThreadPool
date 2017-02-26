@@ -1,4 +1,7 @@
 #include "MyThreadPool.h"
+#include <iostream>
+
+using namespace std;
 
 void MyThreadPool::RemoveThreadFromBusy(MyThread* myThread)
 {
@@ -13,11 +16,12 @@ void MyThreadPool::RemoveThreadFromBusy(MyThread* myThread)
     idle_mutex_.unlock();
 }
 
-MythreadPool::MyThreadPool(int number)
+MyThreadPool::MyThreadPool(int number)
 {
     issurvive_ = true;
-    number_of_thread = number;
+    number_of_thread_ = number;
     idle_thread_container_.assign(number, this);
+    //start thread run pool start function
     thread_this_ = thread(&MyThreadPool::Start, this);
     thread_this_.detach();
 }
@@ -30,11 +34,10 @@ void MyThreadPool::Start()
         {
             busy_mutex_.lock();
             if(busy_thread_container_.size() != 0)
-            {
-                busy_mutex_.unlock();
+            {   busy_mutex_.unlock();
                 continue;
             }
-            busy_mutex_,unlock();
+            busy_mutex_.unlock();
             break;
         }
         idle_mutex_.lock();
@@ -50,12 +53,14 @@ void MyThreadPool::Start()
             task_mutex_.unlock();
             continue;
         }
-        Task* b = task_container_.pop();
+        //get task container's top task
+        Task* b = task_container_.top();
         task_container_.pop();
         task_mutex_.unlock();
 
         idle_mutex_.lock();
-        MyThread* mythread = idle_thread_container_.pop();
+        //get idle thread
+        MyThread* mythread = idle_thread_container_.top();
         idle_thread_container_.pop();
         mythread->Assign(b);
         idle_mutex_.unlock();
@@ -63,6 +68,33 @@ void MyThreadPool::Start()
         busy_mutex_.lock();
         busy_thread_container_.push(mythread);
         busy_mutex_.unlock();
+        //start new thread run the MyThread's Run() function
         mythread->StartThread();
     }
+}
+
+MyThreadPool::~MyThreadPool()
+{
+
+}
+
+void MyThreadPool::AddTask(Task* Task, int priority)
+{
+    Task->SetPriority(priority);
+    task_mutex_.lock();
+    task_container_.push(Task);
+    task_mutex_.unlock();
+}
+
+void MyThreadPool::AddIdleThread(int n)
+{
+    idle_mutex_.lock();
+    idle_thread_container_.assign(n, this);
+    number_of_thread_ += n;
+    idle_mutex_.unlock();
+}
+
+void MyThreadPool::EndMyThreadPool()
+{
+    issurvive_ = false;
 }

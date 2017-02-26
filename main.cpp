@@ -1,6 +1,8 @@
 #include "MyTask.h"
 #include "MyThreadPool.h"
 #include "MyThread.h"
+#include <iostream>
+
 
 int main()
 {
@@ -35,4 +37,6 @@ int main()
         }
     }
     system("pause");
+
+    return 0;
 }

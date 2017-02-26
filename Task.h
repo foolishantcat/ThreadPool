@@ -22,15 +22,18 @@ public:
     {
         if(priority > (PRIORITY::MAX))
         {
-            priority = (PRIORITY::MAX);
+            priority_ = (PRIORITY::MAX);
         }
-        else if(priority > (PRIORITY::MAX))
+        else if(priority < (PRIORITY::MIN))
         {
-            priority = (PRIORITY::MIN);
+            priority_ = (PRIORITY::MIN);
         }
+
+        priority_ = priority;
     }
     virtual void Run() = 0;
 protected:
     int priority_;
 };
-    
+
+#endif

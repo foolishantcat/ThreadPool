@@ -1,6 +1,10 @@
 #ifndef _TASK_CONTAINER_H_
 #define _TASK_CONTAINER_H_
 
+#include "Task.h"
+#include <queue>
+using namespace std;
+
 class TaskContainer
 {
 public:

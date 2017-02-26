@@ -1,13 +1,18 @@
 #ifndef _IDLE_THREAD_CONTAINER_H_
 #define _IDLE_THREAD_CONTAINER_H_
 
+#include <vector>
+
+#include "MyThread.h"
+class MyThreadPool;
+
 class IdleThreadContainer
 {
 
 public:
     IdleThreadContainer();
     ~IdleThreadContainer();
-    std::vector<Mythread*>::size_type size();
+    std::vector<MyThread*>::size_type size();
     void push(MyThread* m);
     void assign(int n, MyThreadPool* m);
     MyThread* top();

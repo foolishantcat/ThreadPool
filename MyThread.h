@@ -1,7 +1,13 @@
 #ifndef _MY_THREAD_H_
 #define _MY_THREAD_H_
 
-class Mythread
+#include "Task.h"
+#include <thread>
+
+class MyThreadPool;
+class Task;
+
+class MyThread
 {
     friend bool operator==(MyThread my1, MyThread my2);
     friend bool operator!=(MyThread my1, MyThread my2);
